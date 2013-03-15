@@ -1,5 +1,6 @@
 package com.johnathanmsmith.mvc.web.config;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -10,8 +11,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.mobile.device.DeviceHandlerMethodArgumentResolver;
 import org.springframework.mobile.device.DeviceResolverHandlerInterceptor;
 import org.springframework.mobile.device.view.LiteDeviceDelegatingViewResolver;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
@@ -41,6 +44,7 @@ public class WebMVCConfig extends WebMvcConfigurerAdapter {
         return url;
     }
 
+    /*
     @Bean
     public LiteDeviceDelegatingViewResolver liteDeviceAwareViewResolver() {
         InternalResourceViewResolver delegate = new InternalResourceViewResolver();
@@ -74,6 +78,11 @@ public class WebMVCConfig extends WebMvcConfigurerAdapter {
 		logger.debug("setting up resource handlers");
 		registry.addResourceHandler("/resources/").addResourceLocations("/resources/**");
 	}
+    */
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        argumentResolvers.add(new DeviceHandlerMethodArgumentResolver());
+    }
 
 	@Override
 	public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
@@ -83,10 +92,10 @@ public class WebMVCConfig extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addInterceptors(final InterceptorRegistry registry) {
-		registry.addInterceptor(new LocaleChangeInterceptor());
         registry.addInterceptor(new DeviceResolverHandlerInterceptor());
 	}
 
+    /*
 	@Bean
 	public SimpleMappingExceptionResolver simpleMappingExceptionResolver() {
 		SimpleMappingExceptionResolver b = new SimpleMappingExceptionResolver();
@@ -97,5 +106,7 @@ public class WebMVCConfig extends WebMvcConfigurerAdapter {
 		mappings.put("org.springframework.transaction.TransactionException", "dataAccessFailure");
 		b.setExceptionMappings(mappings);
 		return b;
+
 	}
+	*/
 }

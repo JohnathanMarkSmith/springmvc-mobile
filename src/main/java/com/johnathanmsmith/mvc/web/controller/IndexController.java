@@ -21,8 +21,7 @@ class IndexController {
         logger.info("Device : " + device);
 
         String page = "index";
-
-        if (device.isMobile()) {
+         if (device.isMobile()) {
             logger.info("Hello mobile user!");
             page = page  + "-mobile";
         } else if (device.isTablet()) {
